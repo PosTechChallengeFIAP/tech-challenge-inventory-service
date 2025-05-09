@@ -1,15 +1,15 @@
 import { injectable } from "tsyringe";
-import { IFindOneOrAllProducts } from "./IFindOneOrAllProducts";
-import { TFindOneOrAllProductsRequest, TFindOneOrAllProductsResponse } from "./TFindOneOrAllProducts";
 import { IProductRepository } from "@domain/repositories/IProductRepository";
+import { IFindOneOrAllProductsUseCase } from "./IFindOneOrAllProductsUseCase";
+import { TFindOneOrAllProductsUseCaseRequest, TFindOneOrAllProductsUseCaseResponse } from "./TFindOneOrAllProductsUseCase";
 
 @injectable()
-export class FindOneOrAllProducts implements IFindOneOrAllProducts {
+export class FindOneOrAllProductsUseCase implements IFindOneOrAllProductsUseCase {
     constructor(
         private readonly productRepository: IProductRepository
     ) {}
 
-    async execute(request: TFindOneOrAllProductsRequest): Promise<TFindOneOrAllProductsResponse> {
+    async execute(request: TFindOneOrAllProductsUseCaseRequest): Promise<TFindOneOrAllProductsUseCaseResponse> {
         const { id, category } = request;
 
         if (id) {

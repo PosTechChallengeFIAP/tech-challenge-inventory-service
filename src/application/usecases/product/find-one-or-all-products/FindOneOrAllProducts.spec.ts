@@ -1,10 +1,10 @@
-import { FindOneOrAllProducts } from "./FindOneOrAllProducts";
+import { FindOneOrAllProductsUseCase } from "./FindOneOrAllProductsUseCase";
 import { IProductRepository } from "@domain/repositories/IProductRepository";
 import { EProductCategory } from "@domain/models/EProductCategory";
 import { IProduct } from "@application/DTOs/product";
 
-describe("FindOneOrAllProducts", () => {
-  let useCase: FindOneOrAllProducts;
+describe("FindOneOrAllProductsUseCase", () => {
+  let useCase: FindOneOrAllProductsUseCase;
   let mockProductRepository: jest.Mocked<IProductRepository>;
 
   const mockProduct: IProduct = {
@@ -24,7 +24,7 @@ describe("FindOneOrAllProducts", () => {
       save: jest.fn(),
     };
 
-    useCase = new FindOneOrAllProducts(mockProductRepository);
+    useCase = new FindOneOrAllProductsUseCase(mockProductRepository);
   });
 
   it("when id is provided should return the product by id", async () => {
