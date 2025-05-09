@@ -1,4 +1,4 @@
-import { IPocRepository } from "@domain/repositories/IPocRepostry";
+import { IPocRepository } from "@domain/repositories/IPocRepository";
 import { IProductRepository } from "@domain/repositories/IProductRepository";
 import { IStockRepository } from "@domain/repositories/IStockRepository";
 import { PocEntityRepository } from "@infra/persistence/typeorm/repositories/poc-entity.repository";

@@ -2,7 +2,7 @@ import { injectable } from "tsyringe";
 import { PocEntity } from "../models/poc.entity";
 import { typeOrmConnection } from "../typeorm-connection";
 import { Repository } from "typeorm";
-import { IPocRepository } from "@domain/repositories/IPocRepostry";
+import { IPocRepository } from "@domain/repositories/IPocRepository";
 import { IPoc } from "@application/DTOs/poc";
 
 @injectable()
