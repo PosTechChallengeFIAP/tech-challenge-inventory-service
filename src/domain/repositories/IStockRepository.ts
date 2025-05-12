@@ -8,4 +8,5 @@ export interface IStockRepository {
     getByPocId(pocId: number): Promise<IStock[]>;
     getByPocAndProductId(pocId: number, productId: number): Promise<IStock | null>;
     updateQuantity(stockId: number, quantity: number): Promise<IStock | null>;
+    decreaseQuantity(stockId: number, quantity: number): Promise<boolean>;
 }

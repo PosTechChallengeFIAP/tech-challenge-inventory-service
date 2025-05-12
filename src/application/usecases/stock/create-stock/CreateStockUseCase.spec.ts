@@ -43,7 +43,7 @@ describe("CreateStockUseCase", () => {
   };
 
   beforeEach(() => {
-    mockStockRepository = { save: jest.fn(), getAll: jest.fn(), getById: jest.fn(), getByPocId: jest.fn(), getByPocAndProductId: jest.fn(), updateQuantity: jest.fn() };
+    mockStockRepository = { save: jest.fn(), getAll: jest.fn(), getById: jest.fn(), getByPocId: jest.fn(), getByPocAndProductId: jest.fn(), updateQuantity: jest.fn(), decreaseQuantity: jest.fn() };
     mockProductRepository = { getAll: jest.fn(), getByCategory: jest.fn(), getById: jest.fn(), save: jest.fn() };
     mockPocRepository = { getAll: jest.fn(), getById: jest.fn(), save: jest.fn() };
 

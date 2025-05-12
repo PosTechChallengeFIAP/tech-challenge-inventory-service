@@ -43,4 +43,32 @@ export class StockEntityRepository implements IStockRepository {
     async updateQuantity(stockId: number, quantity: number): Promise<IStock | null> {
         return await this.save({ id: stockId, quantity } as IStock);
     }
+
+    async decreaseQuantity(stockId: number, quantity: number): Promise<boolean> {
+        const queryRunner = this.repository.manager.connection.createQueryRunner();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
+
+        try {
+            const stock = await queryRunner.manager.findOne(StockEntity, {
+                where: { id: stockId },
+                lock: { mode: 'pessimistic_write' },
+            });
+
+            if (!stock || stock?.quantity < quantity) {
+                await queryRunner.rollbackTransaction();
+                return false;
+            }
+
+            stock.quantity -= quantity;
+            await queryRunner.manager.save(stock);
+            await queryRunner.commitTransaction();
+            return true;
+        } catch (error) {
+            await queryRunner.rollbackTransaction();
+            throw error;
+        } finally {
+            await queryRunner.release();
+        }
+    }
 }
