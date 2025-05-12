@@ -85,6 +85,16 @@ describe("StockEntityRepository", () => {
     expect(result).toEqual(stock);
   });
 
+  it("when update is called should update stock", async () => {
+    const stock = { id: 1 } as StockEntity;
+    repository.save.mockResolvedValue(stock);
+
+    const result = await stockRepository.update(stock);
+
+    expect(repository.save).toHaveBeenCalledWith(stock);
+    expect(result).toEqual(stock);
+  });
+
   it("when updateQuantity is called with valid id should update and return updated stock", async () => {
     const stock = { id: 1, quantity: 10 } as StockEntity;
     jest.spyOn(stockRepository, "getById").mockResolvedValue(stock);

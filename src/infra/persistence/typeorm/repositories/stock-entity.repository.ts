@@ -40,6 +40,10 @@ export class StockEntityRepository implements IStockRepository {
         return await this.repository.save(stock);
     }
 
+    async update(stock: Partial<IStock>): Promise<IStock> {
+        return await this.repository.save(stock);
+    }
+
     async updateQuantity(stockId: number, quantity: number): Promise<IStock | null> {
         const stock = await this.getById(stockId);
         if (!stock) return null;

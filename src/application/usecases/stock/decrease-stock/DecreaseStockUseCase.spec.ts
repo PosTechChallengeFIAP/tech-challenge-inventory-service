@@ -25,6 +25,7 @@ describe("DecreaseStockUseCase", () => {
       save: jest.fn(),
       updateQuantity: jest.fn(),
       decreaseQuantity: jest.fn(),
+      update: jest.fn(),
     };
 
     useCase = new DecreaseStockUseCase(mockStockRepository);
