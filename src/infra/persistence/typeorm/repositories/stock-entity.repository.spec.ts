@@ -1,11 +1,8 @@
 
-import { typeOrmConnection } from "../typeorm-connection";
 import { Repository } from "typeorm";
-import { StockEntity } from "../models/stock.entity";
-import { IStock } from "@application/DTOs/stock";
 import { StockEntityRepository } from "./stock-entity.repository";
-import { EPocCategory } from "@domain/models/EPocCategory";
-import { EProductCategory } from "@domain/models/EProductCategory";
+import { StockEntity } from "../models/stock.entity";
+import { typeOrmConnection } from "../typeorm-connection";
 
 jest.mock("../typeorm-connection", () => ({
   typeOrmConnection: {
@@ -13,85 +10,164 @@ jest.mock("../typeorm-connection", () => ({
   },
 }));
 
-const mockRepository = {
-  find: jest.fn(),
-  findOne: jest.fn(),
-  save: jest.fn(),
-} as unknown as Repository<StockEntity>;
-
-const mockStock: IStock = {
-  id: 1,
-  poc: { id: 1, name: "PDV", description: "Test", category: EPocCategory.CAFE, createdAt: new Date(), updatedAt: new Date() },
-  product: { id: 1, name: "Product", description: "Test", category: EProductCategory.DRINK, createdAt: new Date(), updatedAt: new Date() },
-  quantity: 10,
-  unitPrice: 5,
-  createdAt: new Date(),
-  updatedAt: new Date(),
-};
-
 describe("StockEntityRepository", () => {
-  let repository: StockEntityRepository;
+  let repository: jest.Mocked<Repository<StockEntity>>;
+  let stockRepository: StockEntityRepository;
 
   beforeEach(() => {
-    (typeOrmConnection.getRepository as jest.Mock).mockReturnValue(mockRepository);
-    repository = new StockEntityRepository();
-    jest.clearAllMocks();
+    repository = {
+      find: jest.fn(),
+      findOne: jest.fn(),
+      save: jest.fn(),
+      manager: {
+        connection: {
+          createQueryRunner: jest.fn(),
+        },
+      },
+    } as any;
+
+    (typeOrmConnection.getRepository as jest.Mock).mockReturnValue(repository);
+    stockRepository = new StockEntityRepository();
   });
 
   it("when getAll is called should return all stocks", async () => {
-    mockRepository.find = jest.fn().mockResolvedValue([mockStock]);
-    const result = await repository.getAll();
-    expect(mockRepository.find).toHaveBeenCalled();
-    expect(result).toEqual([mockStock]);
+    const mockStocks = [{ id: 1 }, { id: 2 }] as StockEntity[];
+    repository.find.mockResolvedValue(mockStocks);
+
+    const result = await stockRepository.getAll();
+
+    expect(repository.find).toHaveBeenCalled();
+    expect(result).toEqual(mockStocks);
   });
 
-  it("when getById is called with valid ID should return the stock", async () => {
-    mockRepository.findOne = jest.fn().mockResolvedValue(mockStock);
-    const result = await repository.getById(1);
-    expect(mockRepository.findOne).toHaveBeenCalledWith({ where: { id: 1 } });
+  it("when getById is called with existing id should return stock", async () => {
+    const mockStock = { id: 1 } as StockEntity;
+    repository.findOne.mockResolvedValue(mockStock);
+
+    const result = await stockRepository.getById(1);
+
+    expect(repository.findOne).toHaveBeenCalledWith({ where: { id: 1 } });
     expect(result).toEqual(mockStock);
   });
 
-  it("when getById is called with invalid ID should return null", async () => {
-    mockRepository.findOne = jest.fn().mockResolvedValue(null);
-    const result = await repository.getById(999);
+  it("when getByPocAndProductId is called with valid IDs should return stock", async () => {
+    const mockStock = { id: 1 } as StockEntity;
+    repository.findOne.mockResolvedValue(mockStock);
+
+    const result = await stockRepository.getByPocAndProductId(1, 2);
+
+    expect(repository.findOne).toHaveBeenCalledWith({
+      where: {
+        product: { id: 2 },
+        poc: { id: 1 },
+      },
+    });
+    expect(result).toEqual(mockStock);
+  });
+
+  it("when getByPocId is called should return matching stocks", async () => {
+    const mockStocks = [{ id: 1 }] as StockEntity[];
+    repository.find.mockResolvedValue(mockStocks);
+
+    const result = await stockRepository.getByPocId(3);
+
+    expect(repository.find).toHaveBeenCalledWith({ where: { poc: { id: 3 } } });
+    expect(result).toEqual(mockStocks);
+  });
+
+  it("when save is called should persist stock", async () => {
+    const stock = { id: 1 } as StockEntity;
+    repository.save.mockResolvedValue(stock);
+
+    const result = await stockRepository.save(stock);
+
+    expect(repository.save).toHaveBeenCalledWith(stock);
+    expect(result).toEqual(stock);
+  });
+
+  it("when updateQuantity is called with valid id should update and return updated stock", async () => {
+    const stock = { id: 1, quantity: 10 } as StockEntity;
+    jest.spyOn(stockRepository, "getById").mockResolvedValue(stock);
+    jest.spyOn(stockRepository, "save").mockResolvedValue({ ...stock, quantity: 5 });
+
+    const result = await stockRepository.updateQuantity(1, 5);
+
+    expect(result?.quantity).toBe(5);
+  });
+
+  it("when updateQuantity is called with invalid id should return null", async () => {
+    jest.spyOn(stockRepository, "getById").mockResolvedValue(null);
+
+    const result = await stockRepository.updateQuantity(999, 5);
+
     expect(result).toBeNull();
   });
 
-  it("when getByPocAndProductId is called should return stock matching pocId and productId", async () => {
-    mockRepository.findOne = jest.fn().mockResolvedValue(mockStock);
-    const result = await repository.getByPocAndProductId(1, 1);
-    expect(mockRepository.findOne).toHaveBeenCalledWith({
-      where: {
-        product: { id: 1 },
-        poc: { id: 1 },
-      },
+  describe("decreaseQuantity", () => {
+    let mockQueryRunner: any;
+  
+    beforeEach(() => {
+      mockQueryRunner = {
+        connect: jest.fn(),
+        startTransaction: jest.fn(),
+        commitTransaction: jest.fn(),
+        rollbackTransaction: jest.fn(),
+        release: jest.fn(),
+        manager: {
+          findOne: jest.fn(),
+          save: jest.fn(),
+        },
+      };
+  
+      repository.manager.connection.createQueryRunner = jest.fn().mockReturnValue(mockQueryRunner);
     });
-    expect(result).toEqual(mockStock);
-  });
-
-  it("when getByPocId is called should return all stocks for the given pocId", async () => {
-    mockRepository.find = jest.fn().mockResolvedValue([mockStock]);
-    const result = await repository.getByPocId(1);
-    expect(mockRepository.find).toHaveBeenCalledWith({
-      where: {
-        poc: { id: 1 },
-      },
+  
+    it("when decreaseQuantity is called with valid stock should decrease quantity and commit", async () => {
+      const stock = { id: 1, quantity: 10 };
+  
+      mockQueryRunner.manager.findOne.mockResolvedValue(stock);
+      mockQueryRunner.manager.save.mockResolvedValue({ ...stock, quantity: 7 });
+  
+      const result = await stockRepository.decreaseQuantity(1, 3);
+  
+      expect(mockQueryRunner.connect).toHaveBeenCalled();
+      expect(mockQueryRunner.startTransaction).toHaveBeenCalled();
+      expect(mockQueryRunner.manager.findOne).toHaveBeenCalledWith(StockEntity, {
+        where: { id: 1 },
+        lock: { mode: 'pessimistic_write' },
+      });
+      expect(mockQueryRunner.manager.save).toHaveBeenCalledWith({ id: 1, quantity: 7 });
+      expect(mockQueryRunner.commitTransaction).toHaveBeenCalled();
+      expect(mockQueryRunner.release).toHaveBeenCalled();
+      expect(result).toBe(true);
     });
-    expect(result).toEqual([mockStock]);
-  });
-
-  it("when save is called should persist and return the stock", async () => {
-    mockRepository.save = jest.fn().mockResolvedValue(mockStock);
-    const result = await repository.save(mockStock);
-    expect(mockRepository.save).toHaveBeenCalledWith(mockStock);
-    expect(result).toEqual(mockStock);
-  });
-
-  it("when updateQuantity is called should update and return the stock", async () => {
-    mockRepository.save = jest.fn().mockResolvedValue(mockStock);
-    const result = await repository.updateQuantity(1, 20);
-    expect(mockRepository.save).toHaveBeenCalledWith({ id: 1, quantity: 20 });
-    expect(result).toEqual(mockStock);
-  });
+  
+    it("when stock is not found should rollback and return false", async () => {
+      mockQueryRunner.manager.findOne.mockResolvedValue(null);
+  
+      const result = await stockRepository.decreaseQuantity(999, 3);
+  
+      expect(mockQueryRunner.rollbackTransaction).toHaveBeenCalled();
+      expect(result).toBe(false);
+    });
+  
+    it("when stock quantity is less than requested should rollback and return false", async () => {
+      const stock = { id: 1, quantity: 2 };
+      mockQueryRunner.manager.findOne.mockResolvedValue(stock);
+  
+      const result = await stockRepository.decreaseQuantity(1, 5);
+  
+      expect(mockQueryRunner.rollbackTransaction).toHaveBeenCalled();
+      expect(result).toBe(false);
+    });
+  
+    it("when error is thrown should rollback and rethrow", async () => {
+      mockQueryRunner.manager.findOne.mockRejectedValue(new Error("DB error"));
+  
+      await expect(stockRepository.decreaseQuantity(1, 1)).rejects.toThrow("DB error");
+  
+      expect(mockQueryRunner.rollbackTransaction).toHaveBeenCalled();
+      expect(mockQueryRunner.release).toHaveBeenCalled();
+    });
+  });  
 });
