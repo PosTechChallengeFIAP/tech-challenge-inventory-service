@@ -9,6 +9,6 @@ const decreaseStockController: IController = container.resolve('DecreaseStockCon
 
 export default (route: Router): void => {
     route.post('/stocks', RouterAdapter.adapt(createStockController))
-    route.patch('/stocks', RouterAdapter.adapt(updateStockController))
+    route.patch('/stocks/:stockId', RouterAdapter.adapt(updateStockController))
     route.put('/stocks/:stockId/decrease', RouterAdapter.adapt(decreaseStockController))
 }

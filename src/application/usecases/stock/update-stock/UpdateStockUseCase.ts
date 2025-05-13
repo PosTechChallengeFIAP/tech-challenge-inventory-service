@@ -20,8 +20,8 @@ export class UpdateStockUseCase implements IUpdateStockUseCase {
             throw new Error("Stock not found");
         }
 
-        stock.quantity = quantity;
-        stock.unitPrice = unitPrice;
+        stock.quantity = quantity || stock.quantity;
+        stock.unitPrice = unitPrice || stock.unitPrice;
 
         await this.stockRepository.update(stock);
 

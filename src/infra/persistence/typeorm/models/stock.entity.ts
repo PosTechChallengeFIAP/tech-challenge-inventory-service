@@ -19,7 +19,7 @@ export class StockEntity implements IStock {
     @Column()
     quantity: number;
 
-    @Column()
+    @Column({ type: "decimal", precision: 10, scale: 2 })
     unitPrice: number;
 
     @CreateDateColumn({ name: "created_at" })

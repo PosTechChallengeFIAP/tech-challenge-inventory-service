@@ -18,7 +18,7 @@ export class StockEntityRepository implements IStockRepository {
     }
 
     async getById(id: number): Promise<IStock | null> {
-        return await this.repository.findOne({ where: { id } });
+        return await this.repository.findOne({ where: { id }, relations: ["product", "poc"] });
     }
 
     async getByPocAndProductId(pocId: number, productId: number): Promise<IStock | null> {

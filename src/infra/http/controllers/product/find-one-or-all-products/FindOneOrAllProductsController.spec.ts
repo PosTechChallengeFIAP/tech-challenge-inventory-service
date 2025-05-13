@@ -15,7 +15,7 @@ describe("FindOneOrAllProductsController", () => {
 
   it("when id is provided should return a single product", async () => {
     const request: HttpRequest = {
-      params: { id: "1" },
+      query: { id: "1" },
     };
 
     const expectedProduct = {
@@ -36,7 +36,7 @@ describe("FindOneOrAllProductsController", () => {
 
   it("when id is not provided should return all products", async () => {
     const request: HttpRequest = {
-      params: {},
+      query: {},
     };
 
     const expectedProducts: any[] = [

@@ -16,7 +16,7 @@ describe("FindOneOrAllPocsController", () => {
 
   it("when ID param is provided should return single POC", async () => {
     const request: HttpRequest = {
-      params: { id: "1" },
+      query: { id: "1" },
     };
 
     const poc = { id: 1, name: "POC A", description: "Desc", category: EPocCategory.BAR } as any;
@@ -31,7 +31,7 @@ describe("FindOneOrAllPocsController", () => {
 
   it("when no ID param is provided should return all POCs", async () => {
     const request: HttpRequest = {
-      params: {},
+      query: {},
     };
 
     const pocs: any[] = [

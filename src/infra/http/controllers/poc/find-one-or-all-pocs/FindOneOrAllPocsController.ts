@@ -12,9 +12,9 @@ export class FindOneOrAllPocsController implements IController {
   ) {}
 
   async handle(request: HttpRequest): Promise<HttpResponse> {
-    const { id } = request.params;
+    const { id } = request.query;
 
-    const pocs = await this.findOneOrAllPocsUseCase.execute(id);
+    const pocs = await this.findOneOrAllPocsUseCase.execute({ id });
     return HttpResponseHandler.ok(pocs);
   }
 }

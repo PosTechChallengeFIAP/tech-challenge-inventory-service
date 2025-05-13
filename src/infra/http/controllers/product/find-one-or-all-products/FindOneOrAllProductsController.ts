@@ -12,9 +12,9 @@ export class FindOneOrAllProductsController implements IController {
   ) {}
 
   async handle(request: HttpRequest): Promise<HttpResponse> {
-    const { id } = request.params;
+    const { id } = request.query;
 
-    const products = await this.findOneOrAllProductsUseCase.execute(id);
+    const products = await this.findOneOrAllProductsUseCase.execute({ id });
     return HttpResponseHandler.ok(products);
   }
 }

@@ -14,7 +14,7 @@ export class CreateStockController implements IController {
   async handle(request: HttpRequest): Promise<HttpResponse> {
     const { productId, pocId, quantity, unitPrice } = request.body;
 
-      const stock = await this.createStockUseCase.execute({ productId, pocId, quantity, unitPrice });
-      return HttpResponseHandler.ok(stock);
+    const stock = await this.createStockUseCase.execute({ productId, pocId, quantity, unitPrice });
+    return HttpResponseHandler.ok(stock);
   }
 }
