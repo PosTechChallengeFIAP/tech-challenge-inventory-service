@@ -1,4 +1,4 @@
-import { injectable } from "tsyringe";
+import { inject, injectable } from "tsyringe";
 import { IUpdateStockUseCase } from "./IUpdateStockUseCase";
 import { IStockRepository } from "@domain/repositories/IStockRepository";
 import { IProductRepository } from "@domain/repositories/IProductRepository";
@@ -8,6 +8,7 @@ import { TUpdateStockUseCaseRequest, TUpdateStockUseCaseResponse } from "./TUpda
 @injectable()
 export class UpdateStockUseCase implements IUpdateStockUseCase {
     constructor(
+        @inject("StockRepository")
         private readonly stockRepository: IStockRepository,
     ) {}
 

@@ -8,9 +8,11 @@ import { Repository } from "typeorm";
 
 @injectable()
 export class ProductEntityRepository implements IProductRepository {
-    constructor(
-        private readonly repository: Repository<ProductEntity> = typeOrmConnection.getRepository(ProductEntity),
-    ) {}
+    private repository: Repository<ProductEntity>;
+
+    constructor() {
+        this.repository = typeOrmConnection.getRepository(ProductEntity);
+    }
 
     async getAll(): Promise<IProduct[]> {
         return await this.repository.find();

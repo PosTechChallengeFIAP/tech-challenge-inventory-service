@@ -7,9 +7,11 @@ import { injectable } from "tsyringe";
 
 @injectable()
 export class StockEntityRepository implements IStockRepository {
-    constructor(
-      private readonly repository: Repository<StockEntity> = typeOrmConnection.getRepository(StockEntity),
-    ) {}
+    private readonly repository: Repository<StockEntity>;
+
+    constructor() {
+        this.repository = typeOrmConnection.getRepository(StockEntity);
+    }
     
     async getAll(): Promise<IStock[]> {
         return await this.repository.find();

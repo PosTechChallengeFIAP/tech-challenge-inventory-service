@@ -1,4 +1,4 @@
-import { injectable } from "tsyringe";
+import { inject, injectable } from "tsyringe";
 import { IProductRepository } from "@domain/repositories/IProductRepository";
 import { IFindOneOrAllProductsUseCase } from "./IFindOneOrAllProductsUseCase";
 import { TFindOneOrAllProductsUseCaseRequest, TFindOneOrAllProductsUseCaseResponse } from "./TFindOneOrAllProductsUseCase";
@@ -6,6 +6,7 @@ import { TFindOneOrAllProductsUseCaseRequest, TFindOneOrAllProductsUseCaseRespon
 @injectable()
 export class FindOneOrAllProductsUseCase implements IFindOneOrAllProductsUseCase {
     constructor(
+        @inject("ProductRepository")
         private readonly productRepository: IProductRepository
     ) {}
 

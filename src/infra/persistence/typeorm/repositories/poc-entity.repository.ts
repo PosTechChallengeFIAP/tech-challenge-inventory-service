@@ -7,9 +7,11 @@ import { IPoc } from "@application/DTOs/poc";
 
 @injectable()
 export class PocEntityRepository implements IPocRepository {
-  constructor(
-    private readonly repository: Repository<PocEntity> = typeOrmConnection.getRepository(PocEntity),
-  ) {}
+  private repository: Repository<PocEntity>;
+
+  constructor() {
+    this.repository = typeOrmConnection.getRepository(PocEntity);
+  }
 
   async getAll(): Promise<IPoc[]> {
     return this.repository.find();

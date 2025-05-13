@@ -17,7 +17,7 @@ import { container } from "tsyringe";
 container.registerSingleton<ICreatePocUseCase>('CreatePocUseCase', CreatePocUseCase);
 container.registerSingleton<IFindOneOrAllPocsUsecase>('FindOneOrAllPocsUsecase', FindOneOrAllPocsUsecase);
 container.registerSingleton<ICreateProductUseCase>('CreateProductUseCase', CreateProductUseCase);
-container.registerSingleton<IFindOneOrAllProductsUseCase>('FindOneOrAllProductsUsecase', FindOneOrAllProductsUseCase);
+container.registerSingleton<IFindOneOrAllProductsUseCase>('FindOneOrAllProductsUseCase', FindOneOrAllProductsUseCase);
 container.registerSingleton<ICreateStockUseCase>('CreateStockUseCase', CreateStockUseCase);
 container.registerSingleton<IDecreaseStockUseCase>('DecreaseStockUseCase', DecreaseStockUseCase);
 container.registerSingleton<IUpdateStockUseCase>('UpdateStockUseCase', UpdateStockUseCase);

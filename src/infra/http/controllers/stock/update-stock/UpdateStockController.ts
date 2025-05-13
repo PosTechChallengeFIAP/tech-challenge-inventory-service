@@ -8,7 +8,7 @@ import { inject, injectable } from "tsyringe";
 export class UpdateStockController implements IController {
     constructor(
         @inject("UpdateStockUseCase")
-        private readonly updateStockUseCase: IUpdateStockUseCase
+        private updateStockUseCase: IUpdateStockUseCase
 
     ) {}
 

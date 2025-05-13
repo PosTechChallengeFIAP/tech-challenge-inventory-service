@@ -7,7 +7,7 @@ import { inject, injectable } from "tsyringe";
 @injectable()
 export class FindOneOrAllPocsController implements IController {
   constructor(
-    @inject("FindOneOrAllPocsUseCase")
+    @inject("FindOneOrAllPocsUsecase")
     private readonly findOneOrAllPocsUseCase: IFindOneOrAllPocsUsecase
   ) {}
 

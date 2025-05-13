@@ -8,9 +8,9 @@ import { TCreateStockUseCaseRequest, TCreateStockUseCaseResponse } from "./TCrea
 @injectable()
 export class CreateStockUseCase implements ICreateStockUseCase {
     constructor(
-        @inject("IStockRepository")
+        @inject("StockRepository")
         private readonly stockRepository: IStockRepository,
-        @inject("IProductRepository")
+        @inject("ProductRepository")
         private readonly productRepository: IProductRepository,
         @inject("PocRepository")
         private readonly pocRepository: IPocRepository,

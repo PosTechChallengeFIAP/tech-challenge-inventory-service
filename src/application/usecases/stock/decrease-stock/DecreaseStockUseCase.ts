@@ -6,7 +6,7 @@ import { TDecreaseStockUseCaseRequest, TDecreaseStockUseCaseResponse } from "./T
 @injectable()
 export class DecreaseStockUseCase implements IDecreaseStockUseCase {
     constructor(
-        @inject("IStockRepository")
+        @inject("StockRepository")
         private readonly stockRepository: IStockRepository,
     ) {}
 
