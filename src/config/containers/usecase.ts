@@ -1,0 +1,23 @@
+import { CreatePocUseCase } from "@application/usecases/poc/create-poc/CreatePocUseCase";
+import { ICreatePocUseCase } from "@application/usecases/poc/create-poc/ICreatePocUseCase";
+import { FindOneOrAllPocsUsecase } from "@application/usecases/poc/find-one-or-all-pocs/FindOneOrAllPocsUsecase";
+import { IFindOneOrAllPocsUsecase } from "@application/usecases/poc/find-one-or-all-pocs/IFindOneOrAllPocsUsecase";
+import { CreateProductUseCase } from "@application/usecases/product/create-product/CreateProductUseCase";
+import { ICreateProductUseCase } from "@application/usecases/product/create-product/ICreateProductUseCase";
+import { FindOneOrAllProductsUseCase } from "@application/usecases/product/find-one-or-all-products/FindOneOrAllProductsUseCase";
+import { IFindOneOrAllProductsUseCase } from "@application/usecases/product/find-one-or-all-products/IFindOneOrAllProductsUseCase";
+import { CreateStockUseCase } from "@application/usecases/stock/create-stock/CreateStockUseCase";
+import { ICreateStockUseCase } from "@application/usecases/stock/create-stock/ICreateStockUseCase";
+import { DecreaseStockUseCase } from "@application/usecases/stock/decrease-stock/DecreaseStockUseCase";
+import { IDecreaseStockUseCase } from "@application/usecases/stock/decrease-stock/IDecreaseStockUseCase";
+import { IUpdateStockUseCase } from "@application/usecases/stock/update-stock/IUpdateStockUseCase";
+import { UpdateStockUseCase } from "@application/usecases/stock/update-stock/UpdateStockUseCase";
+import { container } from "tsyringe";
+
+container.registerSingleton<ICreatePocUseCase>('CreatePocUseCase', CreatePocUseCase);
+container.registerSingleton<IFindOneOrAllPocsUsecase>('FindOneOrAllPocsUsecase', FindOneOrAllPocsUsecase);
+container.registerSingleton<ICreateProductUseCase>('CreateProductUseCase', CreateProductUseCase);
+container.registerSingleton<IFindOneOrAllProductsUseCase>('FindOneOrAllProductsUsecase', FindOneOrAllProductsUseCase);
+container.registerSingleton<ICreateStockUseCase>('CreateStockUseCase', CreateStockUseCase);
+container.registerSingleton<IDecreaseStockUseCase>('DecreaseStockUseCase', DecreaseStockUseCase);
+container.registerSingleton<IUpdateStockUseCase>('UpdateStockUseCase', UpdateStockUseCase);

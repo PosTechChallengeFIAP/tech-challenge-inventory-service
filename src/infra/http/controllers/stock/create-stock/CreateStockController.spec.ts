@@ -1,46 +1,48 @@
-
-import { ICreatePocUseCase } from "@application/usecases/poc/create-poc/ICreatePocUseCase";
+import { CreateStockController } from "./CreateStockController";
+import { ICreateStockUseCase } from "@application/usecases/stock/create-stock/ICreateStockUseCase";
 import { HttpRequest } from "@infra/http/protocols/http";
-import { CreatePocController } from "./CreateStockController";
 
-describe("CreatePocController", () => {
-  let createPocUseCase: jest.Mocked<ICreatePocUseCase>;
-  let controller: CreatePocController;
+describe("CreateStockController", () => {
+  let createStockUseCase: jest.Mocked<ICreateStockUseCase>;
+  let controller: CreateStockController;
 
   beforeEach(() => {
-    createPocUseCase = {
+    createStockUseCase = {
       execute: jest.fn(),
     };
-    controller = new CreatePocController(createPocUseCase);
+    controller = new CreateStockController(createStockUseCase);
   });
 
-  it("when valid input is provided should create and return the new POC", async () => {
+  it("when valid request is provided should create stock and return success response", async () => {
     const request: HttpRequest = {
       body: {
-        name: "POC Example",
-        description: "Test Description",
-        category: "FOOD",
+        productId: 1,
+        pocId: 2,
+        quantity: 100,
+        unitPrice: 9.99,
       },
     };
 
-    const createdPoc = {
-      id: 1,
-      name: "POC Example",
-      description: "Test Description",
-      category: "FOOD",
+    const createdStock = {
+      id: 10,
+      productId: 1,
+      pocId: 2,
+      quantity: 100,
+      unitPrice: 9.99,
     } as any;
 
-    createPocUseCase.execute.mockResolvedValue(createdPoc);
+    createStockUseCase.execute.mockResolvedValue(createdStock);
 
     const response = await controller.handle(request);
 
-    expect(createPocUseCase.execute).toHaveBeenCalledWith({
-      name: "POC Example",
-      description: "Test Description",
-      category: "FOOD",
+    expect(createStockUseCase.execute).toHaveBeenCalledWith({
+      productId: 1,
+      pocId: 2,
+      quantity: 100,
+      unitPrice: 9.99,
     });
 
     expect(response.statusCode).toBe(200);
-    expect(response.body).toEqual(createdPoc);
+    expect(response.body).toEqual(createdStock);
   });
 });

@@ -1,20 +1,20 @@
-import { ICreatePocUseCase } from "@application/usecases/poc/create-poc/ICreatePocUseCase";
+import { ICreateStockUseCase } from "@application/usecases/stock/create-stock/ICreateStockUseCase";
 import { IController } from "@infra/http/protocols/controller";
 import { HttpRequest, HttpResponse } from "@infra/http/protocols/http";
 import { HttpResponseHandler } from "@infra/http/protocols/httpResponses";
 import { inject, injectable } from "tsyringe";
 
 @injectable()
-export class CreatePocController implements IController {
+export class CreateStockController implements IController {
   constructor(
-    @inject("CreatePocUseCase")
-    private readonly createPocUseCase: ICreatePocUseCase
+    @inject("CreateStockUseCase")
+    private readonly createStockUseCase: ICreateStockUseCase
   ) {}
 
   async handle(request: HttpRequest): Promise<HttpResponse> {
-    const { name, description, category } = request.body;
+    const { productId, pocId, quantity, unitPrice } = request.body;
 
-      const poc = await this.createPocUseCase.execute({ name, description, category });
-      return HttpResponseHandler.ok(poc);
+      const stock = await this.createStockUseCase.execute({ productId, pocId, quantity, unitPrice });
+      return HttpResponseHandler.ok(stock);
   }
 }
