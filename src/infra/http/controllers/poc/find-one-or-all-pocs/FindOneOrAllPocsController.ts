@@ -15,6 +15,6 @@ export class FindOneOrAllPocsController implements IController {
     const { id } = request.query;
 
     const pocs = await this.findOneOrAllPocsUseCase.execute({ id });
-    return HttpResponseHandler.ok(pocs);
+    return !pocs ? HttpResponseHandler.notFound("Not found") : HttpResponseHandler.ok(pocs);
   }
 }

@@ -15,6 +15,6 @@ export class FindOneOrAllProductsController implements IController {
     const { id } = request.query;
 
     const products = await this.findOneOrAllProductsUseCase.execute({ id });
-    return HttpResponseHandler.ok(products);
+    return !products ? HttpResponseHandler.notFound("Not found") : HttpResponseHandler.ok(products);
   }
 }

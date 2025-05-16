@@ -1,64 +1,108 @@
-import { UpdateStockUseCase } from "./UpdateStockUseCase";
-import { IStockRepository } from "@domain/repositories/IStockRepository";
 import { IStock } from "@application/DTOs/stock";
-import { EProductCategory } from "@domain/models/EProductCategory";
+import { UpdateStockUseCase } from "@application/usecases/stock/update-stock/UpdateStockUseCase";
 import { EPocCategory } from "@domain/models/EPocCategory";
-import { IProduct } from "@application/DTOs/product";
-import { IPoc } from "@application/DTOs/poc";
+import { EProductCategory } from "@domain/models/EProductCategory";
+import { IStockRepository } from "@domain/repositories/IStockRepository";
 
 describe("UpdateStockUseCase", () => {
-  let stockRepository: jest.Mocked<IStockRepository>;
-  let updateStockUseCase: UpdateStockUseCase;
-
-  beforeEach(() => {
-    stockRepository = {
-      getById: jest.fn(),
-      update: jest.fn(),
-    } as any;
-
-    updateStockUseCase = new UpdateStockUseCase(stockRepository);
-  });
-
-  it("when stock exists should update quantity and unitPrice", async () => {
-    const existingStock: IStock = {
+  const mockStock: IStock = {
+    id: 1,
+    poc: {
       id: 1,
-      quantity: 10,
-      unitPrice: 5,
-      product: { id: 1, name: "Product", description: "", category: EProductCategory.FOOD } as IProduct,
-      poc: { id: 1, name: "POC", description: "", category: EPocCategory.BAR } as IPoc,
-    } as IStock;
+      name: "Test Poc",
+      category: EPocCategory.BAR,
+      description: "Test description",
+      createdAt: new Date("2024-01-01T00:00:00Z"),
+      updatedAt: new Date("2024-01-01T00:00:00Z")
+    },
+    product: {
+      id: 1,
+      name: "Test Product",
+      category: EProductCategory.FOOD,
+      description: "Test product description",
+      createdAt: new Date("2024-01-01T00:00:00Z"),
+      updatedAt: new Date("2024-01-01T00:00:00Z")
+    },
+    quantity: 10,
+    unitPrice: 100,
+    createdAt: new Date("2024-01-01T00:00:00Z"),
+    updatedAt: new Date("2024-01-01T00:00:00Z")
+  };
 
-    stockRepository.getById.mockResolvedValue(existingStock);
-    stockRepository.update.mockResolvedValue({ ...existingStock, quantity: 20, unitPrice: 8 });
+  const stockRepository: jest.Mocked<IStockRepository> = {
+    getById: jest.fn(),
+    update: jest.fn(),
+    getAll: jest.fn(),
+    getByPocAndProductId: jest.fn(),
+    getByPocId: jest.fn(),
+    save: jest.fn(),
+    decreaseQuantity: jest.fn(),
+    updateQuantity: jest.fn()
+  };
 
-    const result = await updateStockUseCase.execute({
-      stockId: 1,
-      quantity: 20,
-      unitPrice: 8,
-    });
+  const useCase = new UpdateStockUseCase(stockRepository);
 
-    expect(stockRepository.getById).toHaveBeenCalledWith(1);
-    expect(stockRepository.update).toHaveBeenCalledWith({
-      ...existingStock,
-      quantity: 20,
-      unitPrice: 8,
-    });
-    expect(result.quantity).toBe(20);
-    expect(result.unitPrice).toBe(8);
-  });
-
-  it("when stock does not exist should throw error", async () => {
+  it("when stock does not exist should throw an error", async () => {
     stockRepository.getById.mockResolvedValue(null);
 
     await expect(
-      updateStockUseCase.execute({
-        stockId: 99,
-        quantity: 5,
-        unitPrice: 3,
-      })
+      useCase.execute({ stockId: 1, quantity: 5, unitPrice: 50 })
     ).rejects.toThrow("Stock not found");
+  });
 
-    expect(stockRepository.getById).toHaveBeenCalledWith(99);
-    expect(stockRepository.update).not.toHaveBeenCalled();
+  it("when both quantity and unitPrice are provided should update both fields", async () => {
+    stockRepository.getById.mockResolvedValue({ ...mockStock });
+    stockRepository.update.mockImplementation(async (stock: any) => stock);
+
+    const result = await useCase.execute({
+      stockId: 1,
+      quantity: 20,
+      unitPrice: 150
+    });
+
+    expect(result.quantity).toBe(20);
+    expect(result.unitPrice).toBe(150);
+    expect(stockRepository.update).toHaveBeenCalledWith(result);
+  });
+
+  it("when only quantity is provided should update only quantity", async () => {
+    stockRepository.getById.mockResolvedValue({ ...mockStock });
+    stockRepository.update.mockImplementation(async (stock: any) => stock);
+
+    const result = await useCase.execute({
+      stockId: 1,
+      quantity: 50
+    });
+
+    expect(result.quantity).toBe(50);
+    expect(result.unitPrice).toBe(mockStock.unitPrice);
+    expect(stockRepository.update).toHaveBeenCalledWith(result);
+  });
+
+  it("when only unitPrice is provided should update only unitPrice", async () => {
+    stockRepository.getById.mockResolvedValue({ ...mockStock });
+    stockRepository.update.mockImplementation(async (stock: any) => stock);
+
+    const result = await useCase.execute({
+      stockId: 1,
+      unitPrice: 200
+    });
+
+    expect(result.quantity).toBe(mockStock.quantity);
+    expect(result.unitPrice).toBe(200);
+    expect(stockRepository.update).toHaveBeenCalledWith(result);
+  });
+
+  it("when neither quantity nor unitPrice is provided should keep original values", async () => {
+    stockRepository.getById.mockResolvedValue({ ...mockStock });
+    stockRepository.update.mockImplementation(async (stock: any) => stock);
+
+    const result = await useCase.execute({
+      stockId: 1
+    });
+
+    expect(result.quantity).toBe(mockStock.quantity);
+    expect(result.unitPrice).toBe(mockStock.unitPrice);
+    expect(stockRepository.update).toHaveBeenCalledWith(result);
   });
 });

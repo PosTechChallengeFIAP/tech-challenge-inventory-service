@@ -46,7 +46,7 @@ describe("StockEntityRepository", () => {
 
     const result = await stockRepository.getById(1);
 
-    expect(repository.findOne).toHaveBeenCalledWith({ where: { id: 1 } });
+    expect(repository.findOne).toHaveBeenCalledWith({ where: { id: 1 }, relations: ["product", "poc"] });
     expect(result).toEqual(mockStock);
   });
 
@@ -61,6 +61,7 @@ describe("StockEntityRepository", () => {
         product: { id: 2 },
         poc: { id: 1 },
       },
+      relations: ["product", "poc"],
     });
     expect(result).toEqual(mockStock);
   });
@@ -71,7 +72,7 @@ describe("StockEntityRepository", () => {
 
     const result = await stockRepository.getByPocId(3);
 
-    expect(repository.find).toHaveBeenCalledWith({ where: { poc: { id: 3 } } });
+    expect(repository.find).toHaveBeenCalledWith({ where: { poc: { id: 3 } }, relations: ["product", "poc"] });
     expect(result).toEqual(mockStocks);
   });
 

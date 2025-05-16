@@ -2,6 +2,8 @@ import { CreatePocUseCase } from "@application/usecases/poc/create-poc/CreatePoc
 import { ICreatePocUseCase } from "@application/usecases/poc/create-poc/ICreatePocUseCase";
 import { FindOneOrAllPocsUsecase } from "@application/usecases/poc/find-one-or-all-pocs/FindOneOrAllPocsUsecase";
 import { IFindOneOrAllPocsUsecase } from "@application/usecases/poc/find-one-or-all-pocs/IFindOneOrAllPocsUsecase";
+import { FindOneOrAllStocksByPocUseCase } from "@application/usecases/poc/find-one-or-all-stocks-by-poc/FindOneOrAllStocksByPocUseCase";
+import { IFindOneOrAllStocksByPocUseCase } from "@application/usecases/poc/find-one-or-all-stocks-by-poc/IFindOneOrAllStocksByPocUseCase";
 import { CreateProductUseCase } from "@application/usecases/product/create-product/CreateProductUseCase";
 import { ICreateProductUseCase } from "@application/usecases/product/create-product/ICreateProductUseCase";
 import { FindOneOrAllProductsUseCase } from "@application/usecases/product/find-one-or-all-products/FindOneOrAllProductsUseCase";
@@ -21,3 +23,4 @@ container.registerSingleton<IFindOneOrAllProductsUseCase>('FindOneOrAllProductsU
 container.registerSingleton<ICreateStockUseCase>('CreateStockUseCase', CreateStockUseCase);
 container.registerSingleton<IDecreaseStockUseCase>('DecreaseStockUseCase', DecreaseStockUseCase);
 container.registerSingleton<IUpdateStockUseCase>('UpdateStockUseCase', UpdateStockUseCase);
+container.registerSingleton<IFindOneOrAllStocksByPocUseCase>('FindOneOrAllStocksByPocUseCase', FindOneOrAllStocksByPocUseCase);

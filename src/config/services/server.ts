@@ -4,6 +4,7 @@ import { Logger } from '@infra/utils/logger/Logger'
 import { setupRoutes } from './routes'
 import { envApp } from '@config/variables/app'
 import { setupServerConfig } from './config'
+import { setuprequestHandlers } from './request-handlers'
 
 export class Server {
     private static instance: Server
@@ -22,6 +23,7 @@ export class Server {
         setupServerConfig(app)
         setupMiddlewares(app)
         setupRoutes(app)
+        setuprequestHandlers(app)
         app.get('/', (_, res) => {
             res.status(200).send('OK')
         })

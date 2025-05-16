@@ -30,12 +30,13 @@ export class StockEntityRepository implements IStockRepository {
                 poc: { 
                     id: pocId 
                 },
-            } 
+            },
+            relations: ["product", "poc"]
         });
     }
 
     async getByPocId(pocId: number): Promise<IStock[]> {
-        return await this.repository.find({ where: { poc: { id: pocId } } });
+        return await this.repository.find({ where: { poc: { id: pocId } }, relations: ["product", "poc"] });
     }
 
     async save(stock: IStock): Promise<IStock> {

@@ -1,5 +1,6 @@
 import { CreatePocController } from "@infra/http/controllers/poc/create-poc/CreatePocController";
 import { FindOneOrAllPocsController } from "@infra/http/controllers/poc/find-one-or-all-pocs/FindOneOrAllPocsController";
+import { FindOneOrAllStocksByPocController } from "@infra/http/controllers/poc/fins-one-or-all-stocks-by-poc/FindOneOrAllStocksByPocController";
 import { CreateProductController } from "@infra/http/controllers/product/create-product/CreateProductController";
 import { FindOneOrAllProductsController } from "@infra/http/controllers/product/find-one-or-all-products/FindOneOrAllProductsController";
 import { CreateStockController } from "@infra/http/controllers/stock/create-stock/CreateStockController";
@@ -15,3 +16,4 @@ container.registerSingleton<IController>('FindOneOrAllProductsController', FindO
 container.registerSingleton<IController>('CreateStockController', CreateStockController)
 container.registerSingleton<IController>('DecreaseStockController', DecreaseStockController)
 container.registerSingleton<IController>('UpdateStockController', UpdateStockController)
+container.registerSingleton<IController>('FindOneOrAllStocksByPocController', FindOneOrAllStocksByPocController)
