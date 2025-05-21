@@ -25,6 +25,6 @@ resource "aws_instance" "ecs_instance" {
 }
 
 resource "aws_iam_instance_profile" "ecs_instance_profile" {
-  name = "ecs-instance-profile"
+  name = "inventory-ecs-profile"
   role = "LabRole"
 }
