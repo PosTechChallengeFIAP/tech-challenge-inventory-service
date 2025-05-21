@@ -20,7 +20,7 @@ resource "aws_instance" "ecs_instance" {
   EOF
 
   tags = {
-    Name = "tech-challenge-inventory-ec2-cluster"
+    Name = "tc-inventory-ec2-cluster"
   }
 }
 

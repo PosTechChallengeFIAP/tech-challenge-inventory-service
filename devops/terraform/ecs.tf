@@ -1,9 +1,9 @@
 resource "aws_ecs_cluster" "ecs_cluster" {
-  name = "tech-challenge-inventory-service"
+  name = "tc-inventory-service"
 }
 
 resource "aws_ecs_service" "app_service" {
-  name                    = "tech-challenge-inventory-service"
+  name                    = "tc-inventory-service"
   cluster                 = aws_ecs_cluster.ecs_cluster.id
   task_definition         = aws_ecs_task_definition.app_task.arn
   desired_count           = 2
@@ -18,7 +18,7 @@ resource "aws_ecs_service" "app_service" {
 
   load_balancer {
     target_group_arn = aws_lb_target_group.ecs_target_group.arn
-    container_name   = "tech-challenge-inventory-service"
+    container_name   = "tc-inventory-service"
     container_port   = 3000
   }
 
@@ -30,14 +30,14 @@ resource "aws_ecs_service" "app_service" {
 }
 
 resource "aws_ecs_task_definition" "app_task" {
-  family                   = "tech-challenge-inventory-service"
+  family                   = "tc-inventory-service"
   network_mode             = "awsvpc"
   requires_compatibilities = ["EC2"]
 
   container_definitions = jsonencode([
     {
-      name      = "tech-challenge-inventory-service"
-      image     = "loadinggreg/tech-challenge-inventory-service:${var.tc_image_tag}"
+      name      = "tc-inventory-service"
+      image     = "loadinggreg/tc-inventory-service:${var.tc_image_tag}"
       cpu       = 256
       memory    = 512
       essential = true
@@ -61,7 +61,7 @@ resource "aws_ecs_task_definition" "app_task" {
       logConfiguration = {
         logDriver = "awslogs"
         options = {
-          "awslogs-group"         = "/ecs/tech-challenge-inventory-service"
+          "awslogs-group"         = "/ecs/tc-inventory-service"
           "awslogs-region"        = "us-west-2"
           "awslogs-stream-prefix" = "app-ecs"
         }
@@ -122,5 +122,5 @@ resource "aws_ecs_task_definition" "app_task" {
 }
 
 resource "aws_cloudwatch_log_group" "ecs_log_group" {
-  name = "/ecs/tech-challenge-inventory-service"
+  name = "/ecs/tc-inventory-service"
 }
