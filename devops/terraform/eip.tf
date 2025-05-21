@@ -15,7 +15,7 @@ resource "aws_eip" "nat" {
 
 resource "aws_nat_gateway" "nat" {
   allocation_id = aws_eip.nat.id
-  subnet_id     = data.terraform_remote_state.network.outputs.inventory_api_public_subnet_a_id
+  subnet_id     = data.terraform_remote_state.network.outputs.main_public_subnet_a_id
 
   tags = {
     Name = "tech-challenge-inventory-ecs-nat-gateway"
