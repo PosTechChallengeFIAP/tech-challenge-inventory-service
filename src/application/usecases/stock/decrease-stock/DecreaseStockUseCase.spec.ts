@@ -20,7 +20,7 @@ describe("DecreaseStockUseCase", () => {
     mockStockRepository = {
       getAll: jest.fn(),
       getById: jest.fn(),
-      getByPocAndProductId: jest.fn(),
+      getByPocAndStockId: jest.fn(),
       getByPocId: jest.fn(),
       save: jest.fn(),
       updateQuantity: jest.fn(),

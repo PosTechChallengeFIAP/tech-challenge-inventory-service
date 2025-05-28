@@ -48,7 +48,7 @@ describe("CreateStockUseCase", () => {
       getAll: jest.fn(), 
       getById: jest.fn(), 
       getByPocId: jest.fn(), 
-      getByPocAndProductId: jest.fn(), 
+      getByPocAndStockId: jest.fn(), 
       updateQuantity: jest.fn(), 
       decreaseQuantity: jest.fn(), 
       update: jest.fn() 

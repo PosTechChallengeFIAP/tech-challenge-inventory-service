@@ -7,7 +7,7 @@ export interface IStockRepository {
     getById(id: number): Promise<IStock | null>;
     getAll(): Promise<IStock[]>;
     getByPocId(pocId: number): Promise<IStock[]>;
-    getByPocAndProductId(pocId: number, productId: number): Promise<IStock | null>;
+    getByPocAndStockId(pocId: number, productId: number): Promise<IStock | null>;
     updateQuantity(stockId: number, quantity: number): Promise<IStock | null>;
     decreaseQuantity(stockId: number, quantity: number): Promise<boolean>;
 }

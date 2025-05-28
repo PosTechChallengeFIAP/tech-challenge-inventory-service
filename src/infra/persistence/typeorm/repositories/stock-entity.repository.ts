@@ -21,12 +21,10 @@ export class StockEntityRepository implements IStockRepository {
         return await this.repository.findOne({ where: { id }, relations: ["product", "poc"] });
     }
 
-    async getByPocAndProductId(pocId: number, productId: number): Promise<IStock | null> {
+    async getByPocAndStockId(pocId: number, productId: number): Promise<IStock | null> {
         return await this.repository.findOne({ 
             where: { 
-                product: {
-                    id: productId 
-                }, 
+                id: productId, 
                 poc: { 
                     id: pocId 
                 },

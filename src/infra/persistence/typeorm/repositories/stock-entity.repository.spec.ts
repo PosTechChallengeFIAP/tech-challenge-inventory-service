@@ -50,15 +50,15 @@ describe("StockEntityRepository", () => {
     expect(result).toEqual(mockStock);
   });
 
-  it("when getByPocAndProductId is called with valid IDs should return stock", async () => {
+  it("when getByPocAndStockId is called with valid IDs should return stock", async () => {
     const mockStock = { id: 1 } as StockEntity;
     repository.findOne.mockResolvedValue(mockStock);
 
-    const result = await stockRepository.getByPocAndProductId(1, 2);
+    const result = await stockRepository.getByPocAndStockId(1, 2);
 
     expect(repository.findOne).toHaveBeenCalledWith({
       where: {
-        product: { id: 2 },
+        id: 2,
         poc: { id: 1 },
       },
       relations: ["product", "poc"],

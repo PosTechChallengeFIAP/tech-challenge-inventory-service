@@ -13,7 +13,7 @@ export class FindOneOrAllStocksByPocUseCase implements IFindOneOrAllStocksByPocU
     async execute(request: TFindOneOrAllStocksByPocUseCaseRequest): Promise<TFindOneOrAllStocksByPocUseCaseResponse> {
         const { pocId, productId } = request;
 
-        const stocks = productId ? await this.stockRepository.getByPocAndProductId(pocId, productId): await this.stockRepository.getByPocId(pocId);
+        const stocks = productId ? await this.stockRepository.getByPocAndStockId(pocId, productId): await this.stockRepository.getByPocId(pocId);
         return stocks;
     }
 }

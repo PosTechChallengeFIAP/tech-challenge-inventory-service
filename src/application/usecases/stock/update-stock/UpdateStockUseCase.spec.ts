@@ -33,7 +33,7 @@ describe("UpdateStockUseCase", () => {
     getById: jest.fn(),
     update: jest.fn(),
     getAll: jest.fn(),
-    getByPocAndProductId: jest.fn(),
+    getByPocAndStockId: jest.fn(),
     getByPocId: jest.fn(),
     save: jest.fn(),
     decreaseQuantity: jest.fn(),
